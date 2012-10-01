@@ -1,10 +1,13 @@
 all:      lpc21isp
 
 GLOBAL_DEP  = adprog.h lpc21isp.h lpcprog.h lpcterm.h
+# TODO use environment's chosen gcc or check for clang 
 CC = gcc
+CFLAGS	+= -Wall
 
 ifneq ($(findstring(freebsd, $(OSTYPE))),)
 CFLAGS+=-D__FREEBSD__
+CFLAGS	+= -static
 endif
 
 ifeq ($(OSTYPE),)
@@ -15,7 +18,6 @@ ifneq ($(findstring Darwin,$(OSTYPE)),)
 CFLAGS+=-D__APPLE__
 endif
 
-CFLAGS	+= -Wall -static
 
 adprog.o: adprog.c $(GLOBAL_DEP)
 	$(CC) $(CDEBUG) $(CFLAGS) -c -o adprog.o adprog.c
